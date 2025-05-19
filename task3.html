@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Responsive Quiz & API Fetch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+    }
+
+    .quiz-question {
+      margin-bottom: 20px;
+    }
+
+    .quiz-question p {
+      font-weight: bold;
+    }
+
+    .api-result {
+      margin-top: 30px;
+      padding: 10px;
+      background: #e0f7fa;
+      border-radius: 5px;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 14px;
+      }
+
+      .container {
+        padding: 10px;
+      }
+    }
+
+    @media (min-width: 601px) and (max-width: 1024px) {
+      body {
+        font-size: 16px;
+      }
+    }
+
+    @media (min-width: 1025px) {
+      body {
+        font-size: 18px;
+      }
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Interactive Quiz & API Demo</h1>
+    <div id="quiz">
+      <div class="quiz-question">
+        <p>1. What does HTML stand for?</p>
+        <input type="radio" name="q1" value="a"> Hyper Text Markup Language<br>
+        <input type="radio" name="q1" value="b"> HighText Machine Language<br>
+        <input type="radio" name="q1" value="c"> Hyperloop Train Medium Line<br>
+      </div>
+      <div class="quiz-question">
+        <p>2. What is the purpose of CSS?</p>
+        <input type="radio" name="q2" value="a"> Structure the webpage<br>
+        <input type="radio" name="q2" value="b"> Style the webpage<br>
+        <input type="radio" name="q2" value="c"> Store user data<br>
+      </div>
+      <div class="quiz-question">
+        <p>3. Which language is used to make a webpage interactive?</p>
+        <input type="radio" name="q3" value="a"> Java<br>
+        <input type="radio" name="q3" value="b"> Python<br>
+        <input type="radio" name="q3" value="c"> JavaScript<br>
+      </div>
+      <button onclick="checkAnswers()">Submit Quiz</button>
+      <p id="quiz-result"></p>
+    </div>
+    <div class="api-result">
+      <h2>Get a Random Joke</h2>
+      <button onclick="getJoke()">Fetch Joke</button>
+      <p id="joke-output"></p>
+    </div>
+  </div>
+
+  <script>
+    function checkAnswers() {
+      const answers = {
+        q1: 'a',
+        q2: 'b',
+        q3: 'c'
+      };
+      let score = 0;
+      for (let q in answers) {
+        const selected = document.querySelector(`input[name="${q}"]:checked`);
+        if (selected && selected.value === answers[q]) {
+          score++;
+        }
+      }
+      document.getElementById('quiz-result').textContent = `You scored ${score}/3`;
+    }
+
+    async function getJoke() {
+      try {
+        const res = await fetch('https://official-joke-api.appspot.com/random_joke');
+        const data = await res.json();
+        document.getElementById('joke-output').textContent = `${data.setup} - ${data.punchline}`;
+      } catch (error) {
+        document.getElementById('joke-output').textContent = "Couldn't fetch a joke. Try again!";
+      }
+    }
+  </script>
+</body>
+</html>
